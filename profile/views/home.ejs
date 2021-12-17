@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1>Hello <%= name %></h1>
+    <% if (name ==='Tony Stark') {%>
+      <h3>Genious</h3>
+      <h3>Billionare</h3>
+      <h3>Playboy</h3>
+      <h3>Philanthropist</h3>
+    <%}%>
+    <% if (name ==='Lakshmi') {%>
+      <h3>Your are System Administators Mother</h3>
+    <%}%>
+    <h6>Please click logout for successful submission of form</h6>  
+    <div class="container">
+        <input type="text" class="txtb" placeholder="Add a task">
+      <div class="notcomp">
+        <h3>Not Completed</h3>
+        <div class="count"></div>
+      </div>
+      <div class="comp">
+        <h3>Completed</h3>
+        <div class="count"></div>
+       </div>
+       <!--<form>-->
+        <input type="hidden" class="name" name="name" value="<%= name %>">
+        <input type="hidden" class="todoIncomplete" name="name" value="<%= todoIncomplete %>">
+        <input type="hidden" class="todoCompleted" name="name" value="<%=  todoCompleted %>">
+        <!--<input type="hidden" class="todo" name="todos" value="">-->
+        <button id = "submit" type="submit">Logout</button>
+      <!--</form>-->
+    </div>
+    <script type="text/javascript">
+      var name = $('.name').val();
+      var todo1 = $('.todoIncomplete').val();
+      var todo2 = $('.todoCompleted').val();
+      var todoIncomplete  = todo1.split(',');
+      var todoCompleted = todo2.split(',');
+      //console.log(todoCompleted);
+      if(todoIncomplete[0]===""){
+        todoIncomplete.shift();
+      }
+      if(todoCompleted[0]===""){
+        todoCompleted.shift();
+      }
+      todoIncomplete.forEach((todo) => {
+          var task = $("<div class='task'></div>").text(todo);
+          var del = $("<i class='fas fa-trash-alt'></i>").click(function(){
+            var p = $(this).parent();
+            if(todoIncomplete.includes(p.text())){
+              var index1 = todoIncomplete.indexOf(p.text());
+              todoIncomplete.splice(index1, 1); 
+            }else{
+              var index2 =  todoCompleted.indexOf(p.text());
+              if(index2 > -1){
+                todoCompleted.splice(index2, 1);
+              }
+            }
+              p.fadeOut(function(){
+              p.remove();
+              });
+            });
+          var check = $("<i class='fas fa-check'></i>").click(function(){
+            var p = $(this).parent();
+            var index2 = todoIncomplete.indexOf(p.text());
+            todoCompleted.push(p.text());
+            todoIncomplete.splice(index2, 1);
+            p.fadeOut(function(){
+              $(".comp").append(p);
+              p.fadeIn();
+            });
+            $(this).remove(() => {
+            });
+          });
+          task.append(del,check);
+          $(".notcomp").append(task);
+      });
+      todoCompleted.forEach((todo1) => {
+           var task1 = $("<div class='task'></div>").text(todo1);
+           var del1 = $("<i class='fas fa-trash-alt'></i>").click(function(){
+            var p = $(this).parent();
+            if(todoIncomplete.includes(p.text())){
+              var index1 = todoIncomplete.indexOf(p.text());
+              todoIncomplete.splice(index1, 1); 
+            }else{
+              var index2 =  todoCompleted.indexOf(p.text());
+              //console.log(index2);
+              if(index2 > -1){
+                todoCompleted.splice(index2, 1);
+              }
+            }
+              p.fadeOut(function(){
+              p.remove();
+              });
+            });
+            task1.append(del1);
+            $(".comp").append(task1);
+      });
+      $(".txtb").on("keyup",function(e){
+        //13  means enter button
+        if(e.keyCode == 13 && $(".txtb").val() != "")
+        { 
+          var task = $("<div class='task'></div>").text($(".txtb").val());
+          todoIncomplete.push($(".txtb").val()); 
+          var del = $("<i class='fas fa-trash-alt'></i>").click(function(){
+            var p = $(this).parent();
+            //console.log(p.parentElement.nodeName);console.log(p.text());console.log('You have clicked the delete of '+p.text());
+            if(todoIncomplete.includes(p.text())){
+              var index1 = todoIncomplete.indexOf(p.text());
+              todoIncomplete.splice(index1, 1); 
+            }else{
+              var index2 =  todoCompleted.indexOf(p.text());
+              if(index2 > -1){
+                todoCompleted.splice(index2, 1);
+              }
+            }
+            //console.log(index1);console.log(todoIncomplete)
+              p.fadeOut(function(){
+              p.remove();
+              });
+            });
+          var check = $("<i class='fas fa-check'></i>").click(function(){
+            var p = $(this).parent();
+            //console.log('You have clicked the check of '+p.text());
+            var index2 = todoIncomplete.indexOf(p.text());
+            todoCompleted.push(p.text());
+            todoIncomplete.splice(index2, 1);
+            //console.log(todoCompleted)
+            p.fadeOut(function(){
+              $(".comp").append(p);
+              p.fadeIn();
+            });
+            $(this).remove(() => {
+            });
+          });
+          task.append(del,check);
+          //setInterval(10, ()=>{
+            //  $(".notcomp count").innerHTML = count1;
+            //  $(".comp count").innerHTML = count2;
+            //  });, todos : [{todoIncomplete, todoCompleted}] 
+          $(".notcomp").append(task);
+            //to clear the input
+          $(".txtb").val("");
+         };
+      });
+      //console.log(todoIncomplete);
+      //console.log(todoCompleted);
+      $(document).ready(() => {
+        $("button").click(() => {
+            //$("p").hide();
+            todo1 =  JSON.stringify(Object.assign({}, todoIncomplete));
+            todo2 =  JSON.stringify(Object.assign({}, todoCompleted));
+            $.post('/home', {todo1: todo1, todo2: todo2, name : name });
+            //alert('Successfully submitted')
+            //$('#dialog').dialog();            
+            window.location.replace("/login");
+            /*e.preventDefault();
+            $.ajax({
+              url : "/home",
+              data : {name : name},
+              method :"POST",
+              success: () => {
+                window.location.replace("/login");
+              },
+              error : () => {
+                console.log("error");
+              }
+            });*/
+        });
+      });
+      console.log(todoIncomplete);
+      console.log(todoCompleted);
+      /*
+var indices1 = [];
+      var indices2 = [];
+      for(var i =0; i<todo1.length; i++){
+        if(todo1[i] === ','){
+          indices1.push(i+1);
+        };
+      }
+      todoIncomplete.push(todo1.slice(0, indices1[0]));
+      for(var i =0; i<indices1.length; i++){
+          todoIncomplete.push(todo1.slice(indices1[i], indices1[i+1]));
+      }
+      todoIncomplete.push(todo1.slice(indices1[indices1.length], todo1.length))
+      for(var j =0; j<todo2.length; j++){
+        if(todo2[j] === ','){
+          indices2.push(j+1);
+        }; 
+      }
+      todoCompleted.push(todo2.slice(0, indices2[0]));
+      for(var j =0; j<indices2.length; j++){
+          todoCompleted.push(todo2.slice(indices2[j], indices2[j+1]));
+      }
+ */
+      //console.log(typeof todo1);
+      //todoCompleted.push(todo2.slice(indices2[indices2.length], todo2.length))
+      //console.log(todoCompleted);
+      //console.log(todoIncomplete);
+      //console.log(typeof todo1);
+      //var todoCompleted = [];
+      //var todoIncomplete = [];
+           
+    </script>
+  </body>
+</html>
